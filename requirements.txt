@@ -1,0 +1,10 @@
+streamlit
+pydantic
+langchain_openai
+bs4
+psycopg2
+psycopg[binary,pool]
+pandas
+langchain_core
+requests
+python-dotenv
