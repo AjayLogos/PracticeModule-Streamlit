@@ -11,11 +11,7 @@ hints = llm.hints_llm()
 def get_reponse(id):
     query = get_prompt(id)
     return query
-
-# %%
-# res = get_reponse("ILQ-1510189")
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                # %%
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            # %%
 def get_hints(query:list):
     response = hints.invoke(query)
     res = []
@@ -23,8 +19,6 @@ def get_hints(query:list):
         res.append(hint.hint)
     return res
 
-# result = get_hints(res['hints_prompt'])
-# result
 
 # %%
 def get_solution(query:list):

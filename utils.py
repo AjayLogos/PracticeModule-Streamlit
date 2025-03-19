@@ -6,7 +6,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from prompts import solution_prompt , hints_prompt
 from langchain_core.messages import HumanMessage, SystemMessage
-
+from token_gen import get_user_token
 
 # Function to extract base64 images from text
 def extract_base64_images(text):
@@ -62,7 +62,7 @@ def create_message(question, solution, grade):
 
 
 def fetch_question_details(ids):
-    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE4NDc4NzQsImlhdCI6MTc0MTc2MTQ3NCwiREJJZCI6IjMyODY2NTYiLCJGaXJzdE5hbWUiOiJUZXN0aW5nIFByb2ZpbGUiLCJMYXN0TmFtZSI6IkFzaGEiLCJ1aWQiOiI3MDIyMTM5NTU1IiwiVGVuYW50SWQiOjEsIlRlbmFudENvZGUiOiJpbmZpbml0eWxlYXJuIiwiUm9sZXMiOltdLCJ1YW1faWQiOjMyODY2NTYsImNybl9pZCI6IkNSTlAzMDBUMDAwMDFPQzA1VENPIn0.dQaAocTkaTFEg8zxz-VvUrpfu_zpOJVKIykIf-tDl3I'
+    token = get_user_token()
     url = "https://newqbapi.infinitylearn.com/questions/ids"
     headers = {
         "Authorization": f"Bearer {token}",
@@ -98,7 +98,4 @@ def get_prompt(question_id):
     except:
         return result
     
-#%%
 
-# get_prompt("ILQ-1510396")
-# %%

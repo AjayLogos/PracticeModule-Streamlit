@@ -1,23 +1,6 @@
 def solution_prompt():
-    system  = '''Given a question solution and a grade level, generate a structured step-by-step solution in the following format:
-    Break the solution into logical steps based on the difficulty level of the question can have a Minimum of 3 steps and Maximum of 10 steps, 
-    where each step contains:
-        -name → Name of the step.
-        -step_body → What is the step to be taken? A detailed explanation of what we are doing in this step and why it is necessary.
-                     This should not explicitly give away the answer for this step.This should align with grade as well.
-        -guiding_question → A question prompting the user to determine the result/output of this step.
-            options → A list of possible answers for the guiding question.A minimun of 3 options should be there. Each option should include:
-                option_body → The answer choice.
-                is_correct → A tag (true/false) indicating whether this option is correct.
-                feedback → A short explanation for why this option is correct or incorrect.
 
-        Ensure that the steps align with the given grade level. 
-        Output the steps in structured JSON format.
-        QUESTION {question}
-        SOLUTION {solution}
-        GRADE {grade}
-        '''
-    system1  = '''Given a question, its solution, and a grade level, generate a structured step-by-step breakdown of the solution in JSON format.
+    prompt1  = '''Given a question, its solution, and a grade level, generate a structured step-by-step breakdown of the solution in JSON format.
 
             Breakdown of Steps:
                 The solution should be divided into logical steps based on the difficulty level of the question.
@@ -43,11 +26,52 @@ def solution_prompt():
             The difficulty of explanations should match the students understanding at that grade,do not give answers or formual for student in step body.
             Ensure that the last step directly connects to and resolves the original question.
             Output the final steps in structured JSON format.'''
-    return system1
+    
+    prompt2='''Your a teacher expert in teaching the student in an step wise 
+    Given a question, its solution, and a grade level, generate a structured step-by-step breakdown of the solution in JSON format.
+
+        Breakdown of Steps:
+        - The solution should be divided into **logical** and **concise** steps.
+        - The number of steps should be **appropriate for the difficulty level**:
+            - **Easy questions:** 3-4 steps  
+            - **Moderate questions:** 4-6 steps  
+            - **Difficult questions:** 5-8 steps  
+        - The explanation should align with the grade level, ensuring clarity without overcomplication.
+
+        Step Structure:
+        - **Solution name** → A clear, short and concise title summarizing the solution.
+        - **Each step should include:**
+            - **name** → A short, descriptive title for the step.
+            - **step_body** → A clear, **to-the-point** explanation covering:
+                 - What operation or process is being performed in this step?without giving the answer explicitly.
+                 - Why is this step important in solving the problem?
+                - **Do NOT explicitly state the result or answer for this step in the step body.**
+                - The explanation must **strictly follow the given solution**—do **not** introduce new methods or alternate approaches.
+                - Avoid over-explaining or introducing unnecessary complexity.
+                - Ensure that the **last step directly leads to and resolves the original question**.
+            - **guiding_question** → A thought-provoking question prompting students to determine the result/output for this step or which formula to use.it should be according to solution.
+                - **options** → A list of 3-4 answer choices, including:
+                - **One option based on a common mistake** (e.g., unit conversion errors, calculation errors,formulas,output of the current step).
+                - Each option should contain:
+                    - **option_body** → The answer choice.
+                    - **is_correct** → Boolean (true/false) indicating correctness.
+                    - **feedback** → A short, precise explanation of why this choice is correct or incorrect.
+
+        Additional Considerations:
+            - Ensure steps match the **students understanding at the given grade level**.
+            - Keep explanations **precise and aligned with the given solution**—avoid adding unnecessary complexity.
+            - The step should say about what is
+            - Ensure that the **last step directly leads to and resolves the original question**.
+            - Ensure proper handling of math equations so they are correctly interpreted and presented.
+            - **Do NOT include the final numerical answer or formula directly in step_body—leave it for the guiding question.
+            - **The final answer should be the same as the one provided in the given solution—do not modify it.**
+            - output should be in JSON Format'''
+    # - If the given solution lacks clarity, **refine it without making it overly detailed or confusing**.
+    return prompt2
 
 
 def hints_prompt():
-    hints_template = '''Given a question,solution and a grade level, generate 3 to 5 **short** hints that guide a student through the steps to solve the problem.
+    hints_template1 = '''Given a question,solution and a grade level, generate 3 to 5 **short** hints that guide a student through the steps to solve the problem.
         
         Ensure that:
             Each hint should correspond to a necessary step in solving the problem.
@@ -62,4 +86,32 @@ def hints_prompt():
         QUESTION {question}
         SOLUTION {solution}
         GRADE {grade}'''
-    return hints_template
+    
+    hints_template2='''Given a question, solution, and a grade level, generate **3 to 5 concise hints** to help a student solve the problem.
+
+        Guidelines:
+        - Each hint should align with a **necessary** step in solving the problem.
+        - Hints should be **short, specific, and clear**, avoiding over-explanation.
+        - **Do not** provide direct formulas, but subtly guide the student toward the right approach.
+        - The hints should **follow a logical order**, progressively leading toward the solution.
+
+        Common Mistakes to Address:
+        - If applicable, include hints that **help students avoid common errors**, such as:
+        - Unit conversion mistakes.
+        - Incorrect formula application.
+        - Calculation errors.
+
+        **QUESTION:** {question}  
+        **SOLUTION:** {solution}  
+        **GRADE:** {grade}
+        '''
+    return hints_template2
+
+
+
+        # Output Example:
+        # - **Hint 1:** Identify what is given in the question and what needs to be found.
+        # - **Hint 2:** Consider the correct approach/formula to apply based on the given information.
+        # - **Hint 3:** Be mindful of units—do they need conversion?
+        # - **Hint 4:** Apply the formula and simplify carefully.
+        # - **Hint 5:** Verify your answer—is it reasonable based on the question?

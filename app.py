@@ -19,7 +19,7 @@ id = st.sidebar.text_input("Enter ID:")
 generate_button = st.sidebar.button("Generate")
 
 st.title("Practice Module")
-if generate_button and id:
+if generate_button and id :
     db_result = get_hints_solution(id)
 
     prompt = get_prompt(id)
