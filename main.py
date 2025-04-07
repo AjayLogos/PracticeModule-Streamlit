@@ -17,6 +17,7 @@ def get_hints(query:list):
     res = []
     for hint in response.hints:
         res.append(hint.hint)
+    print("hints:" , res)
     return res
 
 
@@ -25,6 +26,8 @@ def get_solution(query:list):
     response = solution_llm.invoke(query)
     # print(response)
     response = response.model_dump(mode="json")
+    print("solution:" , response)
+    print("----------------------------------------------------------------------------------------")
     return response
 
 # %%
@@ -109,3 +112,6 @@ def get_solution(query:list):
 # # %%
 # df_sampled
 # %%
+
+
+#docker run --name redis-container -p 6379:6379 -d redis

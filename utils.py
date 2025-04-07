@@ -28,7 +28,7 @@ def clean_html(text):
     return cleaned_text
 
 # Function to create a structured message
-def create_message(question, solution, grade):
+def create_message(question,options, solution, grade):
     message_content = []
     
     # Add grade level
@@ -45,6 +45,14 @@ def create_message(question, solution, grade):
         message_content.append({"type": "text", "text": "QUESTION IMAGE:"})  # Label before images
         for img in question_images:
             message_content.append({"type": "image_url", "image_url": {"url": img}})
+
+    # Process options
+    if isinstance(options, list):
+        options = ' '.join([f"option {i+1}:{clean_html(option)}," for i, option in enumerate(options)])
+        message_content.append({"type": "text", "text": f"OPTIONS:{options}"})
+    else:
+        print('No options available')  # Handle non-list cases
+
 
     # Process solution
     solution_images = extract_base64_images(solution)
@@ -76,7 +84,7 @@ def fetch_question_details(ids):
         return response.json()
     else:
         return {"error": f"Request failed with status code {response.status_code}", "details": response.text}
-    
+#%%
 
 def get_prompt(question_id):
     question_ids = [question_id]
@@ -84,18 +92,28 @@ def get_prompt(question_id):
     try:
         question = result['data'][0]['question']['question_text']
         solution = result['data'][0]['question']['solution'][0]['data']
-        grade = result['data'][0]['toc_mapping'].get('grade', []) or 10
+        grade = result['data'][0]['toc_mapping'].get('grade', []) or 11
+        options = result['data'][0]['question']['answer_options']
+        
+        if isinstance(options, list):
+            options = [f"option {i+1}:{clean_html(option)}," for i, option in enumerate(options)]
+        else:
+            options = ['No options available']
 
-    
-        message = create_message(question, solution, grade)
+
+        message = create_message(question,options, solution, grade)
         message = HumanMessage(
             content=message
         )
         solution_system = SystemMessage(content=solution_prompt())
+        # print("solution:" ,solution_system)
         hints_system = SystemMessage(content=hints_prompt())
+        
 
-        return {"Question":question,"Solution":solution,"hints_prompt":[hints_system, message],"solution_prompt":[solution_system, message]}
+        return {"Question":question,"options":options,"Solution":solution,"hints_prompt":[hints_system, message],"solution_prompt":[solution_system, message]}
     except:
         return result
     
 
+
+# %%
