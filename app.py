@@ -4,7 +4,7 @@ import base64
 import re
 from io import BytesIO
 from PIL import Image
-# from database import insert_hints_solution , get_hints_solution
+from database import insert_hints_solution , get_hints_solution
 
 def extract_base64_images(text):
     pattern = r"(data:image\/(?:png|jpeg|jpg);base64,[a-zA-Z0-9+/=]+)"
@@ -25,7 +25,7 @@ generate_button = st.sidebar.button("Generate")
 
 st.title("Practice Module")
 if generate_button and id :
-    # db_result = get_hints_solution(id)
+    db_result = get_hints_solution(id)
 
     prompt = get_prompt(id)
 
@@ -73,14 +73,14 @@ if generate_button and id :
                 st.image(image, caption="Embedded Image", use_container_width=True)
         
         st.subheader("Hints")
-        db_result = None
+        # db_result = None
         if db_result:
             hints = db_result[0]
             solution = db_result[1]
         else:
             hints = get_hints(prompt['hints_prompt'])
             solution = get_solution(prompt['solution_prompt'])
-            # insert_hints_solution(id, hints, solution)
+            insert_hints_solution(id, hints, solution)
 
         
         for hint in hints:
