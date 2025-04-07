@@ -10,7 +10,8 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 
 # Access variables
-OPENAI_KEY = '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'
+OPENAI_KEY = os.getenv("OPENAI_KEY")
+
 class Option(BaseModel):
     option_body: str  # The answer choice
     is_correct: bool  # Tag to indicate if the answer is correct
